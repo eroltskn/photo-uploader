@@ -1,18 +1,19 @@
-"""Route declaration."""
-from flask import current_app as app
 from flask import render_template
+from flask import Blueprint
+
+home_endpoint = Blueprint('', __name__)
 
 
-@app.route("/")
+@home_endpoint.route("/")
 def home():
     """Landing page route."""
     nav = [
-        {"name": "Login", "url": "https://example.com/1"},
-        {"name": "Signup", "url": "https://example.com/2"},
+        {"name": "Login", "url": "user/login"},
+        {"name": "Signup", "url": "user/register"},
     ]
     return render_template(
-        "home.html",
+        "home/home.html",
         nav=nav,
-        title="Home Page Photo Uploader",
+        title="Home Page Photo Uploaderrrr",
         description="Welcome to Landing Page",
     )
