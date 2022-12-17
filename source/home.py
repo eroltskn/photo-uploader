@@ -1,7 +1,7 @@
 from flask import render_template
 from flask import Blueprint
 
-home_endpoint = Blueprint('', __name__)
+home_endpoint = Blueprint('home', __name__)
 
 
 @home_endpoint.route("/")

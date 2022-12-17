@@ -1,6 +1,7 @@
 """Data models."""
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
+from flask_login import UserMixin
 
 db = SQLAlchemy()
 
@@ -87,7 +88,7 @@ class Role(db.Model):
                      nullable=False)
 
 
-class User(db.Model):
+class User(UserMixin,db.Model):
     """Data model for user ."""
 
     __tablename__ = "user"
