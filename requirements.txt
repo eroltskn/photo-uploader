@@ -2,5 +2,9 @@ Flask
 Werkzeug
 Jinja2
 flask-migrate
+flask-wtf
 flask-sqlalchemy
 pymysql
+wtforms
+flask-login
+email-validator

@@ -1,5 +1,6 @@
 """Data models."""
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import check_password_hash, generate_password_hash
 
 db = SQLAlchemy()
 
@@ -86,7 +87,6 @@ class Role(db.Model):
                      nullable=False)
 
 
-
 class User(db.Model):
     """Data model for user ."""
 
@@ -103,6 +103,22 @@ class User(db.Model):
                          unique=False,
                          nullable=False)
 
+    is_active = db.Column(db.Boolean(),
+                          unique=False,
+                          nullable=False,
+                          default=True)
+
     def __init__(self, username, password):
         self.username = username
         self.password = password
+
+    def set_password(self, password):
+        """Create hashed password."""
+        self.password = generate_password_hash(password, method="sha256")
+
+    def check_password(self, password):
+        """Check hashed password."""
+        return check_password_hash(self.password, password)
+
+    def __repr__(self):
+        return "<User {}>".format(self.username)
