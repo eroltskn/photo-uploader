@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask import flash, redirect, render_template, request, url_for
-from flask_login import current_user, login_user
+from flask_login import current_user, login_user, login_required, logout_user
 
 from source.helpers.forms import SignupForm, LoginForm
 from source.models.models import db, User, UserProfile
@@ -73,6 +73,14 @@ def register():
         template="signup-page",
         body="Sign up for a user account.",
     )
+
+@user_endpoint.route("user/logout")
+@login_required
+def logout():
+    """User log-out logic."""
+    logout_user()
+    return redirect(url_for("user.login"))
+
 
 
 @login_manager.unauthorized_handler
