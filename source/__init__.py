@@ -14,6 +14,11 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = CONSTANT.SQLALCHEMY_DATABASE_URI
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = CONSTANT.SQLALCHEMY_TRACK_MODIFICATIONS
     app.config['SECRET_KEY'] = 'any secret string'
+    from os.path import join, dirname, realpath
+
+    UPLOADS_PATH = join(dirname(realpath(__file__)), 'static/assets/img/')
+
+    app.config['UPLOAD_FOLDER'] = UPLOADS_PATH
     login_manager.init_app(app)
 
     db.init_app(app)
