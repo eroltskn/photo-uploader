@@ -1,16 +1,14 @@
-import http
-import json
-import os
-
-from flask import render_template, redirect, url_for, request, flash
+from flask import render_template
 from flask import Blueprint
 
-from source.models.models import UserPhotos, db, UserProfile, User
+from source.helpers.access_control import requires_access_level
+from source.models.models import UserPhotos, db, UserProfile, User, ACCESS
 
 admin_endpoint = Blueprint('admin', __name__)
 
 
 @admin_endpoint.route("admin/", methods=['GET', 'POST'])
+@requires_access_level(ACCESS['admin'])
 def admin_users():
 
     user_info = db.session.query(UserProfile).all()
@@ -20,6 +18,7 @@ def admin_users():
                            )
 
 @admin_endpoint.route("admin/discover_user/<string:user_id>", methods=['GET'])
+@requires_access_level(ACCESS['admin'])
 def discover_photo_user(user_id):
 
     user_photos = db.session.query(UserPhotos).filter_by(user_id=int(user_id)).all()

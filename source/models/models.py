@@ -6,6 +6,11 @@ from flask_login import UserMixin
 db = SQLAlchemy()
 
 
+ACCESS = {
+    'user': 1,
+    'admin': 2
+}
+
 class UserRole(db.Model):
     """Data model for user role."""
 
@@ -144,9 +149,13 @@ class User(UserMixin, db.Model):
                           nullable=False,
                           default=True)
 
-    def __init__(self, username, password):
+    access = db.Column(db.Integer)
+
+
+    def __init__(self, username, password, access=ACCESS['user']):
         self.username = username
         self.password = password
+        self.access = access
 
     def set_password(self, password):
         """Create hashed password."""
@@ -158,3 +167,12 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         return "<User {}>".format(self.username)
+
+    def is_admin(self):
+        return self.access == ACCESS['admin']
+
+    def is_user(self):
+        return self.access == ACCESS['user']
+
+    def allowed(self, access_level):
+        return self.access >= access_level

@@ -1,4 +1,3 @@
-import http
 import json
 import os
 
@@ -6,8 +5,7 @@ from flask import render_template, redirect, url_for, request, flash
 from flask import Blueprint
 from werkzeug.utils import secure_filename
 from flask import current_app as app
-from source.helpers.forms import PhotoForm
-from flask_login import current_user
+from flask_login import current_user, login_required
 from os.path import join, dirname, realpath
 
 from source.models.models import UserPhotos, db
@@ -16,6 +14,7 @@ home_photo_endpoint = Blueprint('photo', __name__)
 
 
 @home_photo_endpoint.route("photo/home")
+@login_required
 def home_photo():
     """Landing page route."""
     nav = [
@@ -32,6 +31,7 @@ def home_photo():
 
 
 @home_photo_endpoint.route("photo/upload", methods=['GET', 'POST'])
+@login_required
 def upload_photo():
     image_path = None
     try:
@@ -53,7 +53,7 @@ def upload_photo():
 
                 user_profile = UserPhotos(user_id=current_user.get_id(),
                                           image_path=image_path,
-                                          filename='assets/img/' + filename)
+                                          filename='assets/img/' + "{}_{}".format(current_user.get_id(), filename))
 
                 db.session.add(user_profile)
 
@@ -74,6 +74,7 @@ def upload_photo():
 
 
 @home_photo_endpoint.route("photo/discover", methods=['GET', 'POST'])
+@login_required
 def discover_photo():
     user_photos = db.session.query(UserPhotos).all()
     return render_template('photo/discover_photo.html',
@@ -83,6 +84,7 @@ def discover_photo():
 
 
 @home_photo_endpoint.route("photo/delete", methods=['POST'])
+@login_required
 def delete_photo():
     image_path_with_extra = request.form.get('image_path')
 
