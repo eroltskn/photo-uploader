@@ -1,3 +1,5 @@
+import http
+import json
 import os
 
 from flask import render_template, redirect, url_for, request, flash
@@ -6,6 +8,7 @@ from werkzeug.utils import secure_filename
 from flask import current_app as app
 from source.helpers.forms import PhotoForm
 from flask_login import current_user
+from os.path import join, dirname, realpath
 
 from source.models.models import UserPhotos, db
 
@@ -30,7 +33,7 @@ def home_photo():
 
 @home_photo_endpoint.route("photo/upload", methods=['GET', 'POST'])
 def upload_photo():
-    image_path =None
+    image_path = None
     try:
         if request.method == 'POST':
             if 'file' not in request.files:
@@ -49,7 +52,7 @@ def upload_photo():
 
                 user_profile = UserPhotos(user_id=current_user.get_id(),
                                           image_path=image_path,
-                                          filename='assets/img/'+filename)
+                                          filename='assets/img/' + filename)
 
                 db.session.add(user_profile)
 
@@ -67,6 +70,32 @@ def upload_photo():
                            title='User Form',
                            user_photos=user_photos
                            )
+
+
+@home_photo_endpoint.route("photo/discover", methods=['GET', 'POST'])
+def discover_photo():
+    user_photos = db.session.query(UserPhotos).all()
+    return render_template('photo/discover_photo.html',
+                           title='User Form',
+                           user_photos=user_photos
+                           )
+
+
+@home_photo_endpoint.route("photo/delete", methods=['POST'])
+def delete_photo():
+    image_path_with_extra = request.form.get('image_path')
+
+    if image_path_with_extra is None:
+        return json.dumps({'error': True}), 400
+
+    image_path = 'static' + image_path_with_extra.partition('static')[2]
+    delete_image_path = join(dirname(realpath(__file__)), image_path)
+    obj = db.session.query(UserPhotos).filter_by(image_path=delete_image_path, user_id=current_user.get_id()).first()
+    db.session.delete(obj)
+    db.session.commit()
+    os.remove(delete_image_path)
+
+    return json.dumps({'id': obj.id}), 200, {'ContentType': 'application/json'}
 
 
 def allowed_file(filename):
