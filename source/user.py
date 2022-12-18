@@ -79,7 +79,7 @@ def register():
 def unauthorized():
     """Redirect unauthorized users to Login page."""
     flash("You must be logged in to view that page.")
-    return redirect(url_for("auth_bp.login"))
+    return redirect(url_for("user.login"))
 
 
 @login_manager.user_loader
