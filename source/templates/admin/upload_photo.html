@@ -1,0 +1,63 @@
+<!doctype html>
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/photo/style.css') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='jss/script.js') }}"></script>
+    <title>Upload new File</title>
+</head>
+
+<body>
+
+    <div class="container fluid">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Myth Photo Uploader</a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('photo.upload_photo') }}">Upload Image</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('photo.discover_photo') }}">Discover Images</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="row">
+          <div class="col-12" style="margin-top: 50px">
+                <h2>Upload new File</h2>
+                  <form method=post enctype=multipart/form-data action="/photo/upload">
+                    <input type=file name=file>
+                    <input type=submit value=Upload>
+                  </form>
+          </div>
+          <hr/>
+          <div class="col-12" style="margin-top: 100px">
+                <div class="overlay">
+                    <img src="blah" id="top" hidden=True>
+                     <div style="float:right;">
+                        <span id="delete" hidden=True onclick=do_delete(this)>DELETE(X)</span>
+                        <span id="close" hidden=True onclick=do_close() >CLOSE(X)</span>
+                    </div>
+<!--                    <span id="delete" hidden=True onclick=do_close()><b><u>DELETE(X)</u></b></span>-->
+<!--                    <span id="close" hidden=True onclick=do_close()><b><u>CLOaaaSE(X)</u></b></span>-->
+                </div>
+
+                <div class="cx" style="background-color:#fff;">
+                {% for item in user_photos %}
+                      <img src="{{url_for('static', filename=item.filename)}}" id="{{item.id}}" height=200 width=200 onclick="clicked_img(this)" >
+                {% endfor %}
+                </div>
+          </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>

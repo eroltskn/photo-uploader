@@ -24,7 +24,7 @@ def login():
             next_page = request.args.get("next")
             return redirect(next_page or url_for("photo.home_photo"))
         flash("Invalid username/password combination")
-        return redirect(url_for("photo.photo"))
+        return redirect(url_for("user.login"))
 
     return render_template(
         "user/login.html",
@@ -58,7 +58,7 @@ def register():
 
                 db.session.commit()  # Create new user
                 login_user(user)  # Log in as newly created user
-                return redirect(url_for("home.home"))
+                return redirect(url_for("photo.home_photo"))
 
             flash("A user already exists with that username.")
 
