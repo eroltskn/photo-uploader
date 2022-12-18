@@ -47,7 +47,8 @@ def upload_photo():
 
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
-                image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                image_path = os.path.join(app.config['UPLOAD_FOLDER'],
+                                          "{}_{}".format(current_user.get_id(), filename))
                 file.save(image_path)
 
                 user_profile = UserPhotos(user_id=current_user.get_id(),

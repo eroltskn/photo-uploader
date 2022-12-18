@@ -3,6 +3,7 @@ from source.constant import Constant as CONSTANT
 from source.models.models import db
 from flask_migrate import Migrate
 from flask_login import LoginManager
+from os.path import join, dirname, realpath
 
 login_manager = LoginManager()
 
@@ -13,12 +14,9 @@ def create_app():
 
     app.config['SQLALCHEMY_DATABASE_URI'] = CONSTANT.SQLALCHEMY_DATABASE_URI
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = CONSTANT.SQLALCHEMY_TRACK_MODIFICATIONS
-    app.config['SECRET_KEY'] = 'any secret string'
-    from os.path import join, dirname, realpath
+    app.config['SECRET_KEY'] = CONSTANT.SECRET_KEY
 
-    UPLOADS_PATH = join(dirname(realpath(__file__)), 'static/assets/img/')
-
-    app.config['UPLOAD_FOLDER'] = UPLOADS_PATH
+    app.config['UPLOAD_FOLDER'] = join(dirname(realpath(__file__)), 'static/assets/img/')
     login_manager.init_app(app)
 
     db.init_app(app)
