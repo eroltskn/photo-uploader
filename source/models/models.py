@@ -74,6 +74,41 @@ class UserProfile(db.Model):
         self.last_name = last_name
 
 
+class UserPhotos(db.Model):
+    """Data model for user profile ."""
+    __tablename__ = "user_photos"
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True)
+
+    user_id = db.Column(db.Integer,
+                        db.ForeignKey("user.id"),
+                        primary_key=False)
+
+    user = db.relationship("User",
+                           lazy=True,
+                           foreign_keys="UserPhotos.user_id")
+
+    image_path = db.Column(db.Text(),
+                           index=False,
+                           unique=False,
+                           nullable=False)
+
+    filename = db.Column(db.Text(),
+                         index=False,
+                         unique=False,
+                         nullable=False)
+
+    created = db.Column(db.DateTime(timezone=True), default=db.func.current_timestamp(), nullable=False)
+    modified = db.Column(db.DateTime(timezone=True), default=db.func.current_timestamp(),
+                         onupdate=db.func.current_timestamp(), nullable=False)
+
+    def __init__(self, user_id, image_path,filename):
+        self.user_id = user_id
+        self.image_path = image_path
+        self.filename = filename
+
+
 class Role(db.Model):
     """Data model for role."""
 
@@ -88,7 +123,7 @@ class Role(db.Model):
                      nullable=False)
 
 
-class User(UserMixin,db.Model):
+class User(UserMixin, db.Model):
     """Data model for user ."""
 
     __tablename__ = "user"

@@ -13,18 +13,18 @@ user_endpoint = Blueprint('user', __name__)
 def login():
     # Bypass if user is logged in
     if current_user.is_authenticated:
-        return redirect(url_for("main_bp.dashboard"))
+        return redirect(url_for("photo.home_photo"))
 
     form = LoginForm()
     # Validate login attempt
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = User.query.filter_by(username=form.username.data).first()
         if user and user.check_password(password=form.password.data):
             login_user(user)
             next_page = request.args.get("next")
-            return redirect(next_page or url_for("main_bp.dashboard"))
+            return redirect(next_page or url_for("photo.home_photo"))
         flash("Invalid username/password combination")
-        return redirect(url_for("user.login"))
+        return redirect(url_for("photo.photo"))
 
     return render_template(
         "user/login.html",
