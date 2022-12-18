@@ -21,8 +21,18 @@ body {
 }
 
 #close {
-  position: fixed;
-  top: 102%;
-  left:50%;
-  transform: translate(-102%, -50%);
+    display:inline;
+  /*position: fixed;*/
+  /*top: 102%;*/
+  /*left:50%;*/
+  /*transform: translate(-102%, -50%);*/
+}
+#delete {
+    display:inline;
+
+  /*position: fixed;*/
+  /*top: 102%;*/
+  /*display:inline;*/
+  /*left:50%;*/
+  /*transform: translate(-102%, -50%);*/
 }
